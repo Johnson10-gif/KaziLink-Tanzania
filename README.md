@@ -60,3 +60,14 @@ Smart Jobs and Internship Matching System/
 ## Maelezo ya usanidi
 
 SQLite hutumika kwa urahisi wa kuanza. Kwa deployment, weka `DJANGO_SECRET_KEY`, `DJANGO_DEBUG=False`, na `DJANGO_ALLOWED_HOSTS` kupitia environment variables, tumia HTTPS, na pangilia database ya production pamoja na ukusanyaji wa static files.
+
+## Kuweka mtandaoni kwa Render
+
+Mradi huu ni Django; GitHub huhifadhi code lakini haiendeshi tovuti ya Django kama GitHub Pages. Faili `render.yaml` inaelekeza Render kuunda web service na PostgreSQL, huku `build.sh` ikiweka dependencies, kukusanya static files na kuendesha migrations.
+
+1. Hakikisha GitHub repository ina muundo wa project kama `config/`, `matching/`, `static/` na `templates/` kwenye root.
+2. Ingia Render, fungua **Blueprints**, chagua **New Blueprint Instance**, kisha ruhusu Render kufikia repository hii ya GitHub.
+3. Kagua gharama za web service na PostgreSQL zinazoonyeshwa na Render kabla ya kubonyeza **Apply**. Blueprint inaweka web service kwenye `free` na PostgreSQL kwenye `basic-256mb`; bei na upatikanaji hutegemea akaunti na eneo.
+4. Baada ya build kufanikiwa, fungua URL ya `.onrender.com` iliyoonyeshwa kwenye Render Dashboard.
+
+Render huweka `DJANGO_SECRET_KEY` kiotomatiki na hutumia PostgreSQL kwa data ya kudumu. Usiweke database ya ndani `db.sqlite3` au siri kwenye GitHub.
