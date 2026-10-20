@@ -22,4 +22,4 @@ databases:
   - name: kazilink-postgres
     databaseName: kazilink
     user: kazilink
-    plan: basic-256mb
+    plan: free
