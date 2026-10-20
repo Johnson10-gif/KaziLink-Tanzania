@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Tafuta Fursa | KaziLink Tanzania{% endblock %}
+{% block content %}
+<section class="page-banner"><div class="container"><span class="eyebrow">Fursa zinazokusubiri</span><h1>Tafuta nafasi yako</h1><p>Ajira, internship na kujitolea kutoka kwa waajiri waliosajiliwa.</p></div></section>
+<section class="container section list-section">
+    <form class="filter-bar" method="get" action="{% url 'job_list' %}">
+        <input type="search" name="q" value="{{ query }}" placeholder="Cheo, kampuni au ujuzi">
+        <input type="text" name="location" value="{{ location }}" placeholder="Mkoa / eneo">
+        <select name="type"><option value="">Aina zote</option><option value="full_time" {% if selected_type == "full_time" %}selected{% endif %}>Ajira</option><option value="internship" {% if selected_type == "internship" %}selected{% endif %}>Internship</option><option value="volunteer" {% if selected_type == "volunteer" %}selected{% endif %}>Kujitolea</option><option value="gig" {% if selected_type == "gig" %}selected{% endif %}>Kujishikiza</option></select>
+        <button class="button" type="submit">Tafuta</button>
+    </form>
+    <div class="results-line"><span><b>{{ jobs|length }}</b> nafasi zimepatikana</span>{% if user.is_authenticated and user.profile.role == "seeker" %}<span class="muted">Zilizolingana zaidi na ujuzi wako zinaonekana kwanza</span>{% endif %}</div>
+    {% include "matching/job_cards.html" with jobs=jobs %}
+</section>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% if jobs %}
+<div class="job-grid">
+    {% for job in jobs %}
+    <article class="job-card">
+        <div class="job-card-top"><span class="company-badge">{{ job.company|slice:":1"|upper }}</span><span class="job-type-pill type-{{ job.job_type }}">{{ job.get_job_type_display }}</span></div>
+        <h3><a href="{% url 'job_detail' job.id %}">{{ job.title }}</a></h3>
+        <p class="company-name">{{ job.company }}</p>
+        <div class="job-meta"><span>⌖ {{ job.location }}</span><span>◷ {{ job.created_at|date:"d M Y" }}</span></div>
+        {% if user.is_authenticated and user.profile.role == "seeker" %}
+        <div class="match-row"><span>Ulinganifu</span><b>{{ job.match_percent|default:"0" }}%</b></div>
+        {% endif %}
+        <a class="card-link" href="{% url 'job_detail' job.id %}">Tazama nafasi <span>→</span></a>
+    </article>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state"><div class="empty-icon">⌕</div><h3>Hakuna nafasi kwa sasa</h3><p>Jaribu kubadilisha utafutaji au rudi tena baadaye.</p></div>
+{% endif %}

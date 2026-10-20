@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | KaziLink Tanzania{% endblock %}
+{% block content %}
+<section class="page-banner dashboard-banner"><div class="container"><span class="eyebrow">Dashboard ya mwombaji</span><h1>Habari, {{ user.first_name|default:user.username }} 👋</h1><p>Fursa nzuri huanza na hatua ndogo. Endelea na safari yako.</p></div></section>
+<section class="container dashboard-section">
+    <div class="dashboard-layout"><div class="dashboard-main">
+        <div class="dashboard-stats"><div class="dashboard-stat"><span>Maombi yangu</span><b>{{ application_count }}</b><small>Jumla ya maombi</small></div><div class="dashboard-stat"><span>Wasifu</span><b>{% if profile.skills %}✓{% else %}—{% endif %}</b><small>{% if profile.skills %}Ujuzi umejazwa{% else %}Ongeza ujuzi wako{% endif %}</small></div><div class="dashboard-stat"><span>Arifa mpya</span><b>{{ notifications|length }}</b><small>Fursa na taarifa</small></div></div>
+        <div class="panel"><div class="panel-heading"><div><h2>Fursa zinazokufaa</h2><p>Mapendekezo yanayotumia ujuzi wako.</p></div><a class="text-link" href="{% url 'job_list' %}">Tazama zote →</a></div>
+            {% if recommendations %}<div class="compact-list">{% for job in recommendations %}<a class="compact-job" href="{% url 'job_detail' job.id %}"><span class="company-badge">{{ job.company|slice:":1"|upper }}</span><span class="compact-job-text"><b>{{ job.title }}</b><small>{{ job.company }} · {{ job.location }}</small></span><span class="match-chip">{{ job.match_percent }}% match</span></a>{% endfor %}</div>
+            {% else %}<div class="empty-inline"><p>Hakuna mapendekezo kwa sasa. Ongeza ujuzi wako kwenye wasifu au angalia nafasi zote.</p><a href="{% url 'profile_edit' %}">Jaza wasifu →</a></div>{% endif %}
+        </div>
+        <div class="panel"><div class="panel-heading"><div><h2>Maombi yangu</h2><p>Fuatilia hatua za maombi yako.</p></div></div>
+            {% if applications %}<div class="table-wrap"><table><thead><tr><th>Nafasi</th><th>Kampuni</th><th>Tarehe</th><th>Hali</th></tr></thead><tbody>{% for application in applications %}<tr><td><a href="{% url 'job_detail' application.job.id %}">{{ application.job.title }}</a></td><td>{{ application.job.company }}</td><td>{{ application.applied_at|date:"d M Y" }}</td><td><span class="status status-{{ application.status }}">{{ application.get_status_display }}</span></td></tr>{% endfor %}</tbody></table></div>
+            {% else %}<div class="empty-inline"><p>Bado hujaomba nafasi yoyote.</p><a href="{% url 'job_list' %}">Tafuta fursa →</a></div>{% endif %}
+        </div>
+    </div><aside class="dashboard-side">
+        <div class="profile-progress"><div class="progress-title"><span class="profile-avatar">{{ user.first_name|slice:":1"|upper|default:"U" }}</span><div><b>{{ user.get_full_name|default:user.username }}</b><small>Wasifu wako</small></div></div><p>{% if profile.skills and profile.education %}Wasifu wako una taarifa muhimu. Unaweza kuuboresha wakati wowote.{% else %}Jaza ujuzi na elimu yako ili upate mapendekezo bora.{% endif %}</p><a class="button button-outline button-wide" href="{% url 'profile_edit' %}">Hariri wasifu</a><a class="side-link" href="{% url 'cv_builder' %}">Tengeneza CV yako <span>→</span></a></div>
+        <div class="panel notification-panel"><div class="panel-heading"><div><h2>Arifa</h2><p>Habari mpya kwako.</p></div></div>{% if notifications %}{% for notification in notifications %}<div class="notification-item {% if not notification.is_read %}unread{% endif %}"><span class="notification-dot"></span><p>{{ notification.message }}<small>{{ notification.created_at|date:"d M Y, H:i" }}</small></p></div>{% endfor %}<form method="post" action="{% url 'mark_notifications_read' %}">{% csrf_token %}<button class="text-button" type="submit">Weka zote kuwa zimesomwa</button></form>{% else %}<p class="muted">Huna arifa mpya.</p>{% endif %}</div>
+    </aside></div>
+</section>
+{% endblock %}

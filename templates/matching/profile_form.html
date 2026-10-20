@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Wasifu Wangu | KaziLink Tanzania{% endblock %}
+{% block content %}
+<section class="container form-page"><a class="back-link" href="{% url 'dashboard' %}">← Rudi dashboard</a><div class="form-panel"><span class="eyebrow">Taarifa zako</span><h1>{% if profile.role == "employer" %}Taarifa za mwajiri{% else %}Wasifu wako{% endif %}</h1><p class="muted">Taarifa zako zinakusaidia kupata matokeo bora kwenye KaziLink.</p>
+    <form method="post" class="form-stack">{% csrf_token %}
+        {% for field in form %}<label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.help_text %}<small class="help-text">{{ field.help_text }}</small>{% endif %}{% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}{% endfor %}
+        <button class="button" type="submit">Hifadhi mabadiliko</button>
+    </form>
+</div></section>
+{% endblock %}

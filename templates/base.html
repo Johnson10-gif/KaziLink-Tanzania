@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Pata ajira, internship na fursa za kujitolea Tanzania.">
+    <title>{% block title %}KaziLink Tanzania{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+</head>
+<body>
+<header class="site-header">
+    <div class="container nav-wrap">
+        <a class="brand" href="{% url 'home' %}"><span class="brand-mark">K</span><span>Kazi<span class="brand-accent">Link</span></span></a>
+        <button class="menu-toggle" type="button" aria-label="Fungua menyu" aria-expanded="false">☰</button>
+        <nav class="nav-links" id="site-nav">
+            <a href="{% url 'job_list' %}">Tafuta nafasi</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}">Dashboard</a>
+                <a href="{% url 'profile_edit' %}">Wasifu</a>
+                {% if user.profile.role == "seeker" %}<a href="{% url 'cv_builder' %}">Tengeneza CV</a>{% endif %}
+                <form class="inline-form" method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="nav-login" type="submit">Toka</button></form>
+            {% else %}
+                <a href="{% url 'login' %}">Ingia</a>
+                <a class="button button-small" href="{% url 'signup' %}">Jisajili bure</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
+<main>
+    {% if messages %}
+    <div class="container message-stack">
+        {% for message in messages %}<div class="alert alert-{{ message.tags }}">{{ message }}</div>{% endfor %}
+    </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+</main>
+<footer class="site-footer">
+    <div class="container footer-content">
+        <a class="brand brand-footer" href="{% url 'home' %}"><span class="brand-mark">K</span><span>Kazi<span class="brand-accent">Link</span></span></a>
+        <p>Fursa sahihi. Hatua inayofuata.</p>
+        <span>© {% now "Y" %} KaziLink Tanzania</span>
+    </div>
+</footer>
+<script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>

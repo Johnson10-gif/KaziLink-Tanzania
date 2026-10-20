@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Chapisha Nafasi | KaziLink Tanzania{% endblock %}
+{% block content %}
+<section class="container form-page"><a class="back-link" href="{% url 'dashboard' %}">← Rudi dashboard</a><div class="form-panel"><span class="eyebrow">Fikia vipaji vipya</span><h1>Chapisha nafasi</h1><p class="muted">Jaza maelezo ili wagombea wanaofaa waweze kuomba.</p>
+    <form method="post" class="form-stack">{% csrf_token %}
+        {% for field in form %}<label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.help_text %}<small class="help-text">{{ field.help_text }}</small>{% endif %}{% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}{% endfor %}
+        {% if form.non_field_errors %}<div class="alert alert-error">{{ form.non_field_errors }}</div>{% endif %}
+        <button class="button" type="submit">Chapisha nafasi <span>→</span></button>
+    </form>
+</div></section>
+{% endblock %}

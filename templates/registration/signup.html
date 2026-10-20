@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Jisajili | KaziLink Tanzania{% endblock %}
+{% block content %}
+<section class="auth-section"><div class="auth-card auth-card-wide">
+    <span class="eyebrow">Anza safari yako</span><h1>Tengeneza akaunti</h1>
+    <p class="muted">Jiunge na jamii ya waombaji na waajiri Tanzania.</p>
+    <form method="post" class="form-stack">{% csrf_token %}
+        {% for field in form %}
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}<small class="help-text">{{ field.help_text|safe }}</small>{% endif %}
+            {% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}
+        {% endfor %}
+        {% if form.non_field_errors %}<div class="alert alert-error">{{ form.non_field_errors }}</div>{% endif %}
+        <button class="button button-wide" type="submit">Jisajili bure</button>
+    </form>
+    <p class="auth-bottom">Una akaunti? <a href="{% url 'login' %}">Ingia hapa</a></p>
+</div></section>
+{% endblock %}

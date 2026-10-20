@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{ job.title }} | KaziLink Tanzania{% endblock %}
+{% block content %}
+<section class="container detail-wrap">
+    <a class="back-link" href="{% url 'job_list' %}">← Rudi kwenye nafasi</a>
+    <div class="detail-grid">
+        <article class="detail-main">
+            <div class="detail-heading"><span class="company-badge company-badge-lg">{{ job.company|slice:":1"|upper }}</span><div><span class="job-type-pill type-{{ job.job_type }}">{{ job.get_job_type_display }}</span><h1>{{ job.title }}</h1><p class="company-name">{{ job.company }} · {{ job.location }}</p></div></div>
+            {% if match_percent != None %}<div class="match-banner"><span>✦</span> Ujuzi wako unaendana kwa <b>{{ match_percent }}%</b> na nafasi hii.</div>{% endif %}
+            <div class="detail-section"><h2>Kuhusu nafasi</h2><p class="preserve-lines">{{ job.description }}</p></div>
+            <div class="detail-section"><h2>Ujuzi na vigezo</h2><p class="preserve-lines">{{ job.requirements }}</p></div>
+            {% if job.application_email %}<p class="muted">Kwa maelezo zaidi: <a href="mailto:{{ job.application_email }}">{{ job.application_email }}</a></p>{% endif %}
+        </article>
+        <aside class="apply-card"><h2>Tuma maombi</h2><p class="muted">Chapishwa {{ job.created_at|date:"d M Y" }}</p>
+            <div class="detail-facts"><div><span>Aina</span><b>{{ job.get_job_type_display }}</b></div><div><span>Eneo</span><b>{{ job.location }}</b></div><div><span>Tarehe ya mwisho</span><b>{{ job.deadline|date:"d M Y"|default:"Haijawekwa" }}</b></div></div>
+            {% if not user.is_authenticated %}<a class="button button-wide" href="{% url 'login' %}?next={{ request.path|urlencode }}">Ingia kuomba nafasi</a>
+            {% elif user.profile.role != "seeker" %}<p class="muted">Akaunti za watafuta kazi pekee ndizo zinazoweza kuomba.</p>
+            {% elif application %}<div class="alert alert-success">Umetuma maombi. Hali: {{ application.get_status_display }}.</div>
+            {% elif not job.is_active %}<p class="muted">Nafasi hii haipokei maombi kwa sasa.</p>
+            {% else %}<form method="post" class="form-stack">{% csrf_token %}<label for="{{ form.cover_letter.id_for_label }}">{{ form.cover_letter.label }}</label>{{ form.cover_letter }}<button class="button button-wide" type="submit">Tuma maombi <span>→</span></button></form>{% endif %}
+        </aside>
+    </div>
+</section>
+{% endblock %}

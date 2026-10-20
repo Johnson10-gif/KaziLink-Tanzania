@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}CV Builder | KaziLink Tanzania{% endblock %}
+{% block content %}
+<section class="container cv-page">
+    <div class="cv-toolbar"><div><a class="back-link" href="{% url 'dashboard' %}">← Rudi dashboard</a><h1>Tengeneza CV yako</h1><p class="muted">Jaza taarifa zako, kisha hifadhi au chapisha kama PDF.</p></div><button class="button button-outline" type="button" onclick="window.print()">↓ Chapisha / Hifadhi PDF</button></div>
+    <div class="cv-layout"><form method="post" class="form-panel form-stack">{% csrf_token %}<h2>Taarifa za CV</h2>
+        <label>Jina kamili</label><input type="text" value="{{ user.get_full_name }}" disabled>
+        <label>Barua pepe</label><input type="email" value="{{ user.email }}" disabled>
+        {% for field in form %}{% if field.name != "company_name" %}<label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}{% endif %}{% endfor %}
+        <button class="button" type="submit">Hifadhi taarifa za CV</button>
+    </form>
+    <article class="cv-preview"><div class="cv-preview-head"><span class="cv-monogram">{{ user.first_name|slice:":1"|upper|default:"U" }}</span><div><h2>{{ user.get_full_name|default:user.username }}</h2><p>{{ profile.location|default:"Tanzania" }}{% if profile.phone %} · {{ profile.phone }}{% endif %} · {{ user.email }}</p></div></div>
+        {% if profile.bio %}<section><h3>Wasifu binafsi</h3><p>{{ profile.bio }}</p></section>{% endif %}
+        {% if profile.skills %}<section><h3>Ujuzi</h3><div class="cv-skills">{% for skill in profile.skill_list %}<span>{{ skill }}</span>{% endfor %}</div></section>{% endif %}
+        {% if profile.experience %}<section><h3>Uzoefu wa kazi</h3><p class="preserve-lines">{{ profile.experience }}</p></section>{% endif %}
+        {% if profile.education %}<section><h3>Elimu</h3><p class="preserve-lines">{{ profile.education }}</p></section>{% endif %}
+        {% if not profile.bio and not profile.skills and not profile.education and not profile.experience %}<p class="muted">Jaza taarifa zako upande wa kushoto ili CV yako ijengwe hapa.</p>{% endif %}
+    </article></div>
+</section>
+{% endblock %}
